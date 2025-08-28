@@ -1,0 +1,59 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# State files and logs
+*.pkl
+processed_events.pkl
+*.log
+logs/
+
+# AWS credentials and configs
+.aws/
+credentials
+config
+*credentials*
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Sensitive configuration files
+config.ini
+secrets.yaml
+*_prod.py
+local_settings.py
+
+# Email templates with real addresses
+*_production.py
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
