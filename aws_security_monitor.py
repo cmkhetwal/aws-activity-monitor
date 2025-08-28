@@ -148,6 +148,13 @@ CRITICAL_EVENTS = {
     'RunTask', 'StartTask', 'StopTask',
     'CreateNodegroup', 'DeleteNodegroup', 'UpdateNodegroupConfig',
     
+    # AWS Backup Events
+    'CreateBackupVault', 'DeleteBackupVault', 'PutBackupVaultAccessPolicy',
+    'CreateBackupPlan', 'DeleteBackupPlan', 'UpdateBackupPlan',
+    'CreateBackupSelection', 'DeleteBackupSelection',
+    'StartBackupJob', 'StopBackupJob', 'DeleteRecoveryPoint',
+    'StartRestoreJob', 'DeleteBackupVaultNotifications',
+    
     # Organizations & Account
     'CreateOrganization', 'DeleteOrganization',
     'CreateAccount', 'CloseAccount', 'InviteAccountToOrganization',
@@ -276,6 +283,13 @@ class AWSSecurityMonitor:
         user_name = event_details.get('user_name', '')
         user_arn = event_details.get('user_arn', '')
         user_agent = event_details.get('user_agent', '')
+        
+        # Special case: Allow user-initiated backup operations (backup.amazonaws.com)
+        # These are legitimate user actions even though they use AWS Backup service
+        if 'backup.amazonaws.com' in user_agent.lower():
+            # Check if it's a real IAM user (not a service role)
+            if user_type == 'IAMUser' and user_name:
+                return False  # Allow user-initiated backup operations
         source_ip = event_details.get('source_ip', '')
         
         # Skip events from AWS service roles and automated processes
@@ -333,7 +347,6 @@ class AWSSecurityMonitor:
             'AWS-DLM',
             'aws-dlm',
             'rds.amazonaws.com',
-            'backup.amazonaws.com',
             'elasticbeanstalk.amazonaws.com',
             'cloudformation.amazonaws.com',
             'lambda.amazonaws.com',
